@@ -65,10 +65,10 @@ if __name__ == '__main__':
 	# ---preferences--- 
 	debugging = True
 	networktable_ip = "localhost"
-	hsv_lower_bound = [0,163,115]
+	hsv_lower_bound = [35,24,0]
 	hsv_upper_bound = [180,255,255]
-	area_min = 500
-	area_max = 10000
+	area_min = 4632
+	area_max = 8505
 
 	# setup NetworkTables
 	NetworkTable.setIPAddress(networktable_ip)
