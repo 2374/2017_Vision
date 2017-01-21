@@ -8,6 +8,7 @@ def nothing(x):
 	pass
 # Creating a window for later use
 cv2.namedWindow('result')
+cv2.namedWindow('output')
 
 # Starting with 100's to prevent error while masking
 h_min,s_min,v_min,h_max,s_max,v_max = 0,0,0,0,0,0
@@ -31,8 +32,8 @@ cv2.createTrackbar('height max','result',240,240,nothing)
 while(1):
 
 	_, frame = cap.read()
-	cap.set(3,320)
-	cap.set(4,240)
+	cap.set(3,640)
+	cap.set(4,480)
 
 	# converting to HSV
 	hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
@@ -64,7 +65,6 @@ while(1):
 	for cnt in contours:
 		area = cv2.contourArea(cnt)
 		if area_min < area < area_max:
-			hull = cv2.convexHull(cnt)
 
 			# used for circles
 			#(x,y),radius = cv2.minEnclosingCircle(hull)
@@ -77,7 +77,8 @@ while(1):
 			if width_min < w < width_max and height_min < h < height_max:
 				cv2.rectangle(result,(x,y),(x+w,y+h),(0,255,0),2)
 
-	cv2.imshow('result',result)
+	cv2.imshow('output',result)
+	cv2.imshow('hsv', mask)
 
 	k = cv2.waitKey(5) & 0xFF
 	if k == 27:

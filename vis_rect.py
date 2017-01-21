@@ -4,11 +4,24 @@ import numpy as np
 import cv2
 from networktables import NetworkTable
 
-def sendData(cX,cY,area):
+def sendData(contours):
+	xList = []
+	yList = []
+	wList = []
+	hList = []
+	
+	for cnt in contours:
+		x,y,w,h = cnt
+		xList.append(x)
+		yList.append(y)
+		wList.append(w)
+		hList.append(h)
+	
 	table = NetworkTable.getTable("vision")
-	table.putNumber("centerX", cX)
-	table.putNumber("centerY", cY)
-	table.putNumber("area", area)
+	table.putNumberArray("x", xList)
+	table.putNumberArray("y", yList)
+	table.putNumberArray("w", wList)
+	table.putNumberArray("h", hList)
 	return
 	
 def processImage(img):
@@ -18,14 +31,14 @@ def processImage(img):
 	# threshold to only include wanted HSV values
 	thresh = cv2.inRange(hsv,np.array(hsv_lower_bound),np.array(hsv_upper_bound))
 	
-	# bluring image to reduce noise
-	blur = cv2.GaussianBlur(thresh,(7,7),0)
-	
-	return blur
+	return thresh
 
-def getPreferedContour(img):
+def getPreferedContours(img):
 	# using contours to form shapes
 	image, contours, hierarchy = cv2.findContours(img,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+	
+	# output array
+	output = []
 	
 	# sorting through all the countours
 	for cnt in contours:
@@ -34,41 +47,22 @@ def getPreferedContour(img):
 		area = cv2.contourArea(cnt)
 
 		# filtering out contours that are too big or too small
-		if area_min < area < area_max:
+		if area_min < area:
 			
-			# creating a convex hull around the contour
-			hull = cv2.convexHull(cnt)
+			# creating a rectangle the contour
+			x,y,w,h = cv2.boundingRect(cnt)
+			
+			output.append([x,y,w,h])
 
-			# creating a rectangle around the convex hull
-			rect = cv2.minAreaRect(hull)
-			
-			# draws a box around the rectangle
-			box = cv2.boxPoints(rect)
-			box = np.int0(box)
-			
-			return box
-	
-	return None
-
-def getContourSpecs(contour):
-	# determining the center of the box
-	M = cv2.moments(contour)
-	centerX = int(M["m10"] / M["m00"])
-	centerY = int(M["m01"] / M["m00"])
-	
-	# determining area
-	area = cv2.contourArea(contour)
-	
-	return centerX, centerY, area
+	return output
 	
 if __name__ == '__main__':
 	# ---preferences--- 
 	debugging = True
-	networktable_ip = "localhost"
-	hsv_lower_bound = [35,24,0]
-	hsv_upper_bound = [180,255,255]
-	area_min = 4632
-	area_max = 8505
+	networktable_ip = "172.22.11.2"
+	hsv_lower_bound = [60,186,41]
+	hsv_upper_bound = [92,255,199]
+	area_min = 100
 
 	# setup NetworkTables
 	NetworkTable.setIPAddress(networktable_ip)
@@ -77,6 +71,8 @@ if __name__ == '__main__':
 
 	# setup camera feed
 	cap = cv2.VideoCapture(0)
+	cap.set(3,640)
+	cap.set(4,480)
 
 	while True:
 		# isValid returns if frame is read correctly and frame is a matrix of info from a frame of the camera
@@ -85,20 +81,17 @@ if __name__ == '__main__':
 		# process the image
 		processed = processImage(raw)
 		
-		# find the right contour
-		contour = getPreferedContour(processed)
+		# find the right contours
+		contours = getPreferedContours(processed)
 		
-		# check to see if a contour was found and then send the data to the NetworkTable
-		if contour is not None:
-			x,y,area = getContourSpecs(contour)
-			sendData(x,y,area)
+		sendData(contours)
 				
-			# drawing a visual box to the debug images
-			if debugging:
-				cv2.drawContours(raw, [contour], 0, (0,255,0), 2)
-				cv2.drawContours(processed, [contour], 0, (0,255,0), 2)
-		else:
-			sendData(0,0,0)
+		# drawing a visual box to the debug images
+		if debugging:
+			for cnt in contours:
+				x,y,w,h = cnt
+				cv2.rectangle(raw,(x,y),(x+w,y+h),(0,255,0),2)
+				cv2.rectangle(processed,(x,y),(x+w,y+h),(0,255,0),2)
 
 		# showing the debug images
 		if debugging:
