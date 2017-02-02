@@ -47,7 +47,7 @@ def getPreferedContours(img):
 		area = cv2.contourArea(cnt)
 
 		# filtering out contours that are too big or too small
-		if area_min < area:
+		if area_min < area < area_max:
 			
 			# creating a rectangle the contour
 			x,y,w,h = cv2.boundingRect(cnt)
@@ -59,10 +59,11 @@ def getPreferedContours(img):
 if __name__ == '__main__':
 	# ---preferences--- 
 	debugging = True
-	networktable_ip = "172.22.11.2"
-	hsv_lower_bound = [60,186,41]
-	hsv_upper_bound = [92,255,199]
-	area_min = 100
+	networktable_ip = "localhost"
+	hsv_lower_bound = [94,33,76]
+	hsv_upper_bound = [138,144,188]
+	area_min = 1484
+	area_max = 3613
 
 	# setup NetworkTables
 	NetworkTable.setIPAddress(networktable_ip)
