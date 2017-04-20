@@ -13,3 +13,10 @@ This script is use to calibrate the vis_rect.py, the main vision processing scri
 ## vis_rect.py
 
 This is the main vision processing script that outputs arrays of x and y coordinates, widths, and heights of the seen targets. In this case, each rectangle is viewed as a separate target. The arrays are passed to network tables hosted by the roboRIO.
+
+## Helpful Resources
+
+Installing OpenCV on a RaspberryPi: http://www.pyimagesearch.com/2016/10/24/ubuntu-16-04-how-to-install-opencv/
+
+OpenCV and Python tutorials and documentation: http://opencv-python-tutroals.readthedocs.io/en/latest/index.html
+
