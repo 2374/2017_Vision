@@ -8,7 +8,7 @@ This script is called before vis_calibrator.py and vis_rect.py runs to set the c
 
 ## vis_calibrator.py
 
-This script is use to calibrate the vis_rect.py, the main vision processing script, to the hsv threshold of the target. After a calibration, the hsv values were updated in vis_rect.py.
+This script is use to calibrate the vis_rect.py, the main vision processing script, to the hsv threshold of the target. After a calibration, the hsv values were updated in vis_rect.py. In order to view the script's GUI, the script was ran on a laptop that was connected to the camera. The laptop also had Ubuntu, OpenCV, and other necessary libraries to simulate the Pi and calibrate the main script.
 
 ## vis_rect.py
 
@@ -19,4 +19,3 @@ This is the main vision processing script that outputs arrays of x and y coordin
 Installing OpenCV on a RaspberryPi: http://www.pyimagesearch.com/2016/10/24/ubuntu-16-04-how-to-install-opencv/
 
 OpenCV and Python tutorials and documentation: http://opencv-python-tutroals.readthedocs.io/en/latest/index.html
-
