@@ -1,6 +1,6 @@
 # 2017_Vision
 
-A RaspberryPi running a python script was used with a Microsoft LifeCam HD-3000 for vision processing. OpenCV was the vision processing library, and WPILib's network tables were used to pass data from the Pi to the RoboRIO. The post-processing code to analyse the data pased to the RoboRIO can be seen in [here](https://github.com/2374/2017_Season/blob/master/2017_Season/src/org/usfirst/frc/team2374/robot/subsystems/Vision.java), and the rest of the robot code can be seen [here](https://github.com/2374/2017_Season).
+A RaspberryPi running a python script was used with a Microsoft LifeCam HD-3000 for vision processing. OpenCV was the vision processing library, and WPILib's network tables were used to pass data from the Pi to the RoboRIO. The post-processing code to analyse the data that was passed to the RoboRIO can be seen [here](https://github.com/2374/2017_Season/blob/master/2017_Season/src/org/usfirst/frc/team2374/robot/subsystems/Vision.java), and the rest of the robot code can be seen [here](https://github.com/2374/2017_Season).
 
 ## initalizeCamersha.sh
 
