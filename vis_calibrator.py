@@ -29,7 +29,7 @@ if __name__ == '__main__':
 	cv2.createTrackbar('height min','result',0,240,nothing)
 	cv2.createTrackbar('height max','result',240,240,nothing)
 
-	cap = cv2.VideoCapture(0)
+	cap = cv2.VideoCapture(1)
 	cap.set(3,640)
 	cap.set(4,480)
 
@@ -58,8 +58,6 @@ if __name__ == '__main__':
 		upper_range = [h_max,s_max,v_max]
 
 		mask = cv2.inRange(hsv,np.array(lower_range),np.array(upper_range))
-		
-		#maskOut = cv2.inRange(hsv,np.array(lower_range),np.array(upper_range))
 
 		result = cv2.bitwise_and(frame,frame,mask = mask)
 
@@ -74,8 +72,6 @@ if __name__ == '__main__':
 					cv2.rectangle(result,(x,y),(x+w,y+h),(0,255,0),2)
 
 		cv2.imshow('output',result)
-		#cv2.imshow('hsv', maskOut)
-
 
 		k = cv2.waitKey(5) & 0xFF
 		if k == 27:

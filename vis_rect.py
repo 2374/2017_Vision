@@ -47,7 +47,7 @@ def getPreferedContours(img):
 		area = cv2.contourArea(cnt)
 
 		# filtering out contours that are too big or too small
-		if area_min < area < area_max:
+		if area_min < area:
 			
 			# creating a rectangle the contour
 			x,y,w,h = cv2.boundingRect(cnt)
@@ -58,12 +58,10 @@ def getPreferedContours(img):
 	
 if __name__ == '__main__':
 	# ---preferences--- 
-	debugging = True
-	networktable_ip = "localhost"
-	hsv_lower_bound = [94,33,76]
-	hsv_upper_bound = [138,144,188]
-	area_min = 1484
-	area_max = 3613
+	networktable_ip = "10.23.74.2"
+	hsv_lower_bound = [72,99,29]
+	hsv_upper_bound = [91,242,151]
+	area_min = 138
 
 	# setup NetworkTables
 	NetworkTable.setIPAddress(networktable_ip)
@@ -86,23 +84,10 @@ if __name__ == '__main__':
 		contours = getPreferedContours(processed)
 		
 		sendData(contours)
-				
-		# drawing a visual box to the debug images
-		if debugging:
-			for cnt in contours:
-				x,y,w,h = cnt
-				cv2.rectangle(raw,(x,y),(x+w,y+h),(0,255,0),2)
-				cv2.rectangle(processed,(x,y),(x+w,y+h),(0,255,0),2)
 
-		# showing the debug images
-		if debugging:
-			cv2.imshow('raw',raw)
-			cv2.imshow('processed',processed)
-
-			# the amount of milliseconds to wait before the next frame and exits on pressing the esc key
-			if cv2.waitKey(5) & 0xFF == 27:
-				break
+		# the amount of milliseconds to wait before the next frame and exits on pressing the esc key
+		if cv2.waitKey(5) & 0xFF == 27:
+			break
 
 	# when finished, release the capture and destory any created windows 
 	cap.release()
-	cv2.destroyAllWindows()
