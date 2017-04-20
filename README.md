@@ -4,7 +4,7 @@ A RaspberryPi running a python script was used with a Microsoft LifeCam HD-3000 
 
 ## initalizeCamersha.sh
 
-This script is called before vis_rect.py runs to set the camera to the proper settings.
+This script is called before vis_calibrator.py and vis_rect.py runs to set the camera to the proper settings. For competition, a startup script was made on the Pi that ran this script before it ran vis_rect.py.
 
 ## vis_calibrator.py
 
